@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//ES" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<link href="css/toDo.css" rel="stylesheet">
+		<script src="js/jquery-1.11.1.js"></script>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+		<script src="js/toDo.js"></script>
+	</head>
+	<body>
+		<div>
+			<table id="new_search" border="1">
+				<tr>
+					<td>
+						<center>
+							<table>
+								<tr>
+									<td colspan=2>
+										<center>
+											<h1>New/Update task</h1>
+										</center>
+									</td>
+								</tr>
+								
+								<tr>
+									<td>id:<i>(only for update)</i></td>
+									<td width="40px"><input id="id_insert" type="number" name="task" size="50" tabindex="1"/></td>							
+								</tr>
+								<tr>
+									<td>Task:<i>*</i></td>
+									<td width="40px"><input id="task_insert" type="text" name="task" size="50" tabindex="1"/></td>							
+								</tr>
+								<tr>
+									<td>Context:<i>*</i></td>
+									<td width="40px"><input id="context_insert" type="text" name="context" size="50" tabindex="2"/></td>
+								</tr>
+								<tr>
+									<td>Project:<i>*</i></td>
+									<td width="40px"><input id="project_insert" type="text" name="project" size="50" tabindex="3"/></td>
+								</tr>
+								<tr>
+									<td>Priority:<i>*</i></td>
+									<td width="40px"><input id="priority_insert" type="number" name="priority" size="50" tabindex="4"/></td>
+								</tr>
+								<tr>
+									<td colspan=2>
+										<center>
+											<button id="insert_btn">Acept</button>
+										</center>
+									</td>
+								</tr>
+							</table>
+						</center>
+					</td>
+					<td>
+						<center>
+							<table>
+								<tr>
+									<td colspan=2>
+										<center>
+											<h1>Search task</h1>
+										</center>
+									</td>
+								</tr>
+								
+								<tr>
+									<td>Task:</td>
+									<td width="40px"><input id="task_search" type="text" name="task" size="50" tabindex="5"/></td>							
+								</tr>
+								<tr>
+									<td>Context:</td>
+									<td width="40px"><input id="context_search" type="text" name="context" size="50" tabindex="6"/></td>
+								</tr>
+								<tr>
+									<td>Project:</td>
+									<td width="40px"><input id="project_search" type="text" name="project" size="50" tabindex="7"/></td>
+								</tr>
+								<tr>
+									<td>Priority:</td>
+									<td width="40px"><input id="priority_search" type="number" name="priority" size="50" tabindex="8"/></td>
+								</tr>
+								<tr>
+									<td colspan=2>
+										<i>* Empty for all task</i>
+									</td>
+								</tr>
+								<tr>
+									<td colspan=2>
+										<center>
+											<button id="search_btn">Search</button>
+										</center>
+									</td>
+								</tr>
+							</table>
+						</center>
+					</td>
+				</tr>
+			</table>
+			
+			
+			<center><h1>Task list</h1></center>
+			<table id="list" border="1">
+				<thead>
+					<tr>
+						<th style="width:6%">Id</th>
+						<th style="width:20%">Task</th>
+						<th style="width:20%">Context</th>
+						<th style="width:20%">Project</th>
+						<th style="width:6%">Priority</th>
+						<th style="width:6%"></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,13 @@
+td {
+	padding: 5px;
+	text-align: left;
+}
+
+th {
+	padding: 5px;
+	text-align: center;
+}
+
+#new_search, #list{
+	width: 100%;
+}
