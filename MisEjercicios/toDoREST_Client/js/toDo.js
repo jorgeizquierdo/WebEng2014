@@ -20,6 +20,7 @@ $(document).ready(function() {
 				updateToDo($('#id_insert').val(), toDo);
 			}
 			
+			$('#id_insert').val("");
 			$('#task_insert').val("");
 			$('#context_insert').val("");
 			$('#project_insert').val("");
@@ -49,7 +50,7 @@ function showToDoList(toDoList) {
 	for (var i in toDoList){
 		showToDo(toDoList[i]);
 	}
-	
+									
 	$(".delete_btn").click(function() {
 		deleteTask($(this).closest('.task').data('id'));
 	});
@@ -57,13 +58,17 @@ function showToDoList(toDoList) {
 
 function showToDo(toDo) {  
 	$('#list').find('tbody').append('<tr id="task_' + toDo.id + '" class="task" data-id="' + toDo.id + '">' +
-										'<td style="width:6%">' + toDo.id + '</td>' +
-										'<td style="width:20%">' + toDo.task + '</td>' +
-										'<td style="width:20%">' + toDo.context + '</td>' +
-										'<td style="width:20%">' + toDo.project + '</td>' +
-										'<td style="width:6%">' + toDo.priority + '</td>' +
-										'<td style="width:6%"><center><button class="delete_btn">Delete</button></center></td>' +
+										toHTML(toDo) +
 									'</tr>' );
+}
+
+function toHTML(toDo){
+	return	'<td style="width:6%">' + toDo.id + '</td>' +
+			'<td style="width:20%">' + toDo.task + '</td>' +
+			'<td style="width:20%">' + toDo.context + '</td>' +
+			'<td style="width:20%">' + toDo.project + '</td>' +
+			'<td style="width:6%">' + toDo.priority + '</td>' +
+			'<td style="width:6%"><center><button class="delete_btn">Delete</button></center></td>';
 }
 
 /* SERVER CALLS */
@@ -76,6 +81,7 @@ function getToDoList() {
 		type : 'GET',
 		success : function (data)
 		{
+			$('#list').find('tbody').empty();
 			showToDoList(data);
 		}
 	});
@@ -103,9 +109,12 @@ function createToDo(toDo) {
 		url : REST_URI,
 		dataType : "json",
 		data : toDo,		
-		success : function(response, todo) {
-			$('#list').find('tbody').empty();
-			getToDoList();
+		success : function(todo) {
+			showToDo(todo);
+									
+			$(".delete_btn").click(function() {
+				deleteTask($(this).closest('.task').data('id'));
+			});
 		}
 	});
 }
@@ -117,9 +126,12 @@ function updateToDo(id, toDo) {
 		url : REST_URI + "/" + id,
 		dataType : "json",
 		data : toDo,		
-		success : function(response, todo) {      
-			$('#list').find('tbody').empty();
-			getToDoList();
+		success : function(todo) {      
+			$('#task_' + id).html(toHTML(todo));
+									
+			$(".delete_btn").click(function() {
+				deleteTask($(this).closest('.task').data('id'));
+			});
 		}
 	});
 }
