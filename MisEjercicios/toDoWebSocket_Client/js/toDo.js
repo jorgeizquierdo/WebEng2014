@@ -1,7 +1,8 @@
+var URI = "ws://localhost:8025/toDos";
+var socket; 
+
 /* Document Ready */
 $(document).ready(function() { 
-  
-	getToDoList();
   
 	$("#insert_btn").click(function() {
 		if ( $('#task_insert').val().length == 0 || $('#context_insert').val().length == 0 || $('#project_insert').val().length == 0 || $('#priority_insert').val().length == 0 ) {
@@ -13,6 +14,7 @@ $(document).ready(function() {
 				project: $('#project_insert').val(),
 				priority: $('#priority_insert').val()
 			});
+			
 			if($('#id_insert').val().length == 0){
 				createToDo(toDo);
 			}
@@ -20,6 +22,7 @@ $(document).ready(function() {
 				updateToDo($('#id_insert').val(), toDo);
 			}
 			
+			$('#id_insert').val("");
 			$('#task_insert').val("");
 			$('#context_insert').val("");
 			$('#project_insert').val("");
@@ -41,8 +44,36 @@ $(document).ready(function() {
 		
 		getToDoListFilter(toDo);
 	});
+	
+	connectServer();
   
 });
+
+function connectServer(){
+	socket = new WebSocket(URI);
+	socket.onopen = function(){
+		getToDoList();
+	}
+	socket.onmessage = function(respuesta){
+		respuesta = respuesta.data;
+		var op = respuesta.substring(0, respuesta.indexOf("::"));
+		switch (op) {
+			case "addToDo":
+			case "updateToDo":
+			case "removeToDo":
+				break;
+			case "getToDoList":
+			case "getToDoListFilter":
+				var msg = JSON.parse(respuesta.substring(respuesta.indexOf("::") + 2));
+				$('#list').find('tbody').empty();
+				showToDoList(msg);
+				break;
+		}
+	}
+	socket.onerror = function(){
+		alert("Error connecting to server");
+	}
+}
 
 /* Shows tasks on table */
 function showToDoList(toDoList) {  
@@ -67,70 +98,22 @@ function showToDo(toDo) {
 }
 
 /* SERVER CALLS */
-var REST_URI = "http://localhost:8080/toDos";
-
-function getToDoList() {  
-	$.ajax({
-		url : REST_URI,
-		contentType : 'application/json',
-		type : 'GET',
-		success : function (data)
-		{
-			showToDoList(data);
-		}
-	});
+function getToDoList() { 
+	socket.send("getToDoList");
 }
 
 function getToDoListFilter(toDo) {  
-	$.ajax({
-		type : 'PUT',
-		contentType : 'application/json',
-		url : REST_URI,
-		dataType : "json",
-		data : toDo,
-		success : function (data)
-		{
-			$('#list').find('tbody').empty();
-			showToDoList(data);
-		}
-	});
+	socket.send("getToDoListFilter::" + toDo);
 }
 
 function createToDo(toDo) {
-	$.ajax({
-		type : 'POST',
-		contentType : 'application/json',
-		url : REST_URI,
-		dataType : "json",
-		data : toDo,		
-		success : function(response, todo) {
-			$('#list').find('tbody').empty();
-			getToDoList();
-		}
-	});
+	socket.send("addToDo::" + toDo);
 }
 
 function updateToDo(id, toDo) {
-	$.ajax({
-		type : 'PUT',
-		contentType : 'application/json',
-		url : REST_URI + "/" + id,
-		dataType : "json",
-		data : toDo,		
-		success : function(response, todo) {      
-			$('#list').find('tbody').empty();
-			getToDoList();
-		}
-	});
+	socket.send("updateToDo::" + id + "::" + toDo);
 }
 
 function deleteTask(id) {
-	$.ajax({
-		url: REST_URI + "/" + id,
-		contentType : 'application/json',
-		type:  'DELETE',
-		success : function() {
-			$('#task_' + id).remove();
-		}
-	});
+	socket.send("removeToDo::" + id);
 }

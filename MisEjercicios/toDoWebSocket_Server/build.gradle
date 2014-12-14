@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+
+repositories {
+   mavenCentral()                                               
+}
+
+dependencies {
+	compile "com.google.code.gson:gson:2.3"
+	compile 'org.glassfish.tyrus:tyrus-container-grizzly-server:1.8.3'
+}
+
+task server(type: JavaExec) {
+	standardInput 	= System.in  
+    group 			= 'To Do Websockets Service'
+    description 	= 'Start a Websocket endpoint'
+    main 			= 'todo.events.WebSocketServer'
+	classpath 		= sourceSets.main.runtimeClasspath
+}
